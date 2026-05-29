@@ -36,5 +36,5 @@ outputs/      gráficos generados
 
 ## Autores
 
-Ancarani · Formenti · Mendes · Morenico · [tu apellido]  
+Ancarani Juan Diego · Formenti Agustín · Mendes Lorenzo · Morenico Andrés · Chocobares Juan Cruz  
 Lic. Ciencias de Datos — UCA Rosario · SyPE 2026
