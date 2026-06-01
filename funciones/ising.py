@@ -22,16 +22,16 @@ import matplotlib.colors as mcolors
 def inicializar_ising(N: int, T: float, seed: int = 42) -> np.ndarray:
     """
     Inicializa una grilla N×N de espines ±1.
-    Si T es alta → distribución aleatoria.
-    Si T es baja → todos alineados (orden inicial).
+    Si T < 2.0 (régimen frío) → todos alineados (orden inicial).
+    Si T >= 2.0               → distribución aleatoria.
     """
     rng = np.random.default_rng(seed)
-    if T > 3.0:
-        # Fase desordenada: espines aleatorios
-        return rng.choice([-1, 1], size=(N, N))
+    if T < 2.0:
+        # Régimen ordenado: arrancar con todos los espines alineados
+        return np.ones((N, N), dtype=int)
     else:
-        # Empezamos desde configuración aleatoria para observar la transición
-        return rng.choice([-1, 1], size=(N, N))
+        # Régimen desordenado: arrancar aleatorio
+        return rng.choice([-1, 1], size=(N, N)).astype(int)
 
 
 # ───────────────────────────────────────────────
@@ -109,8 +109,8 @@ def paso_metropolis(grilla: np.ndarray, T: float, J: float = 1.0,
 # SIMULACIÓN COMPLETA
 # ───────────────────────────────────────────────
 
-def correr_ising(N: int = 50, T: float = 2.0, n_pasos: int = 200,
-                 n_equilibrio: int = 100, J: float = 1.0,
+def correr_ising(N: int = 50, T: float = 2.0, n_pasos: int = 1000,
+                 n_equilibrio: int = 500, J: float = 1.0,
                  snapshots_en: list = None, seed: int = 42):
     """
     Corre la simulación de Ising y retorna snapshots y observables.
@@ -164,8 +164,8 @@ def correr_ising(N: int = 50, T: float = 2.0, n_pasos: int = 200,
 # TRANSICIÓN DE FASE: M vs T
 # ───────────────────────────────────────────────
 
-def curva_magnetizacion_vs_temperatura(N: int = 30, n_pasos: int = 300,
-                                        n_equilibrio: int = 150,
+def curva_magnetizacion_vs_temperatura(N: int = 30, n_pasos: int = 600,
+                                        n_equilibrio: int = 400,
                                         T_min: float = 0.5, T_max: float = 4.5,
                                         n_T: int = 20, seed: int = 42):
     """
